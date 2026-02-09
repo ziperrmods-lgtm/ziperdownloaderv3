@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TikTok Downloader - ZIPER CRUSH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2A6BFF;
+            --secondary-blue: #1A4FC5;
+            --accent-cyan: #00D1FF;
+            --dark-bg: #0A0E17;
+            --card-bg: rgba(15, 22, 40, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(42, 107, 255, 0.15);
+            --gradient-primary: linear-gradient(135deg, #2A6BFF 0%, #1A4FC5 100%);
+            --gradient-accent: linear-gradient(135deg, #00D1FF 0%, #2A6BFF 100%);
+            --sidebar-width: 280px;
+            --header-height: 75px;
+            --nav-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            background-color: #050A14;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at 50% 0%, rgba(26, 79, 197, 0.15) 0%, rgba(10, 14, 23, 1) 70%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- CONTAINER UTAMA --- */
+        .app-container {
+            width: 100%;
+            height: 100dvh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            color: white;
+            background: linear-gradient(to bottom, rgba(10, 14, 23, 0.95), rgba(15, 22, 40, 0.95));
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Mode Desktop/Tablet */
+        @media (min-width: 768px) {
+            .app-container {
+                width: 420px;
+                height: 90vh;
+                max-height: 900px;
+                border-radius: 28px;
+                border: 1px solid rgba(42, 107, 255, 0.2);
+                background: linear-gradient(to bottom, rgba(10, 14, 23, 0.98), rgba(15, 22, 40, 0.98));
+                box-shadow: 
+                    0 25px 60px rgba(0, 0, 0, 0.6),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            }
+            
+            .main-content::-webkit-scrollbar { width: 6px; }
+            .main-content::-webkit-scrollbar-thumb { 
+                background: var(--primary-blue); 
+                border-radius: 10px; 
+                opacity: 0.5;
+            }
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(42, 107, 255, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(42, 107, 255, 0.5); }
+        }
+
+        .anim-element {
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+
+        /* --- HEADER --- */
+        header {
+            height: var(--header-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            flex-shrink: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(42, 107, 255, 0.1);
+            background: rgba(10, 14, 23, 0.8);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        .header-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(to right, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .icon-btn {
+            background: rgba(42, 107, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(42, 107, 255, 0.2);
+            color: #B8D0FF;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .icon-btn:hover::after {
+            left: 100%;
+        }
+
+        .icon-btn:active { 
+            transform: scale(0.95); 
+            background: rgba(42, 107, 255, 0.2);
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 25px 25px 100px 25px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+
+        /* --- INPUT SECTION --- */
+        .input-group { 
+            position: relative; 
+            margin-bottom: 20px; 
+        }
+
+        .input-box {
+            width: 100%;
+            background: rgba(10, 14, 23, 0.7);
+            border: 1px solid rgba(42, 107, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px 45px 16px 16px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            font-weight: 400;
+        }
+
+        .input-box:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 209, 255, 0.15), 0 0 20px rgba(42, 107, 255, 0.2);
+            background: rgba(10, 14, 23, 0.9);
+        }
+
+        .input-box::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .input-icon {
+            position: absolute; 
+            right: 16px; 
+            top: 50%;
+            transform: translateY(-50%); 
+            color: var(--accent-cyan); 
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+
+        /* --- ACTION BUTTON --- */
+        .action-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 6px 20px rgba(42, 107, 255, 0.3);
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        .action-btn:active { 
+            transform: scale(0.98); 
+            box-shadow: 0 3px 15px rgba(42, 107, 255, 0.4);
+        }
+        .action-btn:disabled { 
+            opacity: 0.6; 
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-wrapper { 
+            margin-top: 20px; 
+            display: none; 
+        }
+        .progress-track {
+            width: 100%; 
+            height: 6px; 
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px; 
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%; 
+            width: 0%; 
+            background: var(--gradient-accent);
+            transition: width 0.4s ease;
+            border-radius: 10px;
+            position: relative;
+        }
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: loadingShimmer 1.5s infinite;
+        }
+        .progress-text {
+            text-align: center; 
+            font-size: 0.75rem; 
+            color: #8BA3FF;
+            margin-top: 8px; 
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 300;
+        }
+
+        @keyframes loadingShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* --- RESULT SECTION --- */
+        .result-section { 
+            display: none; 
+        }
+
+        .video-wrapper {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #000;
+            margin-bottom: 20px;
+            border: 1px solid rgba(42, 107, 255, 0.2);
+            position: relative;
+            padding-top: 177%;
+            max-height: 60vh;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-player {
+            position: absolute; 
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meta-info { 
+            text-align: center; 
+            margin-bottom: 20px; 
+        }
+        .meta-title { 
+            color: #fff; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        .meta-author { 
+            color: var(--accent-cyan); 
+            font-size: 0.85rem; 
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-grid {
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr;
+            background: rgba(10, 14, 23, 0.6);
+            padding: 15px; 
+            border-radius: 14px; 
+            margin-bottom: 20px;
+            border: 1px solid rgba(42, 107, 255, 0.1);
+        }
+        .stat-item {
+            text-align: center; 
+            color: #C3D2FF; 
+            font-size: 0.85rem;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 6px;
+        }
+        .stat-item i { 
+            color: var(--accent-cyan); 
+            font-size: 1.1rem; 
+        }
+        .stat-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .dl-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        
+        .dl-btn {
+            background: rgba(42, 107, 255, 0.1);
+            border: 1px solid rgba(42, 107, 255, 0.2);
+            padding: 16px 12px; 
+            border-radius: 14px;
+            color: #fff; 
+            text-decoration: none;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dl-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.5s;
+        }
+
+        .dl-btn:hover::before {
+            left: 100%;
+        }
+
+        .dl-btn:active { 
+            background: rgba(42, 107, 255, 0.2); 
+            transform: scale(0.98); 
+        }
+        .dl-btn i { 
+            font-size: 1.3rem; 
+            margin-bottom: 8px; 
+            color: var(--accent-cyan); 
+        }
+        .dl-btn span { 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+            margin-bottom: 2px;
+        }
+        .dl-btn small { 
+            font-size: 0.7rem; 
+            color: #8BA3FF; 
+            font-weight: 300;
+        }
+
+        /* --- TERMINAL LOG --- */
+        .terminal-log {
+            background: rgba(5, 10, 20, 0.9); 
+            border: 1px solid rgba(42, 107, 255, 0.2);
+            border-radius: 14px; 
+            padding: 15px;
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 0.75rem;
+            height: 100px; 
+            overflow-y: auto; 
+            color: var(--accent-cyan);
+            margin-top: 25px;
+            backdrop-filter: blur(5px);
+        }
+        .log-line { 
+            margin-bottom: 5px; 
+            border-bottom: 1px solid rgba(42, 107, 255, 0.05); 
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .log-line::before {
+            content: '>';
+            color: #8BA3FF;
+            font-weight: bold;
+        }
+        .log-error { color: #FF6B8B; }
+        .log-info { color: #8BA3FF; }
+        .log-success { color: #00FF9D; }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            position: absolute;
+            bottom: 0; 
+            left: 0; 
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(10, 14, 23, 0.95);
+            display: flex; 
+            justify-content: space-around; 
+            align-items: center;
+            border-top: 1px solid rgba(42, 107, 255, 0.15);
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            padding: 0 20px;
+        }
+        .nav-item {
+            font-size: 1.3rem; 
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s; 
+            position: relative;
+            width: 50px; 
+            height: 100%;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            text-decoration: none;
+        }
+        .nav-item.active { 
+            color: var(--accent-cyan); 
+        }
+        .nav-item.active::after {
+            content: ''; 
+            position: absolute; 
+            top: 0;
+            width: 30px; 
+            height: 3px; 
+            background: var(--gradient-accent);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 5px 15px rgba(0, 209, 255, 0.3);
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            position: absolute; 
+            top: 0; 
+            left: -100%;
+            width: var(--sidebar-width); 
+            height: 100%;
+            background: rgba(10, 14, 23, 0.98); 
+            z-index: 999;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-right: 1px solid rgba(42, 107, 255, 0.2);
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 10px 0 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+        }
+        .sidebar.active { left: 0; }
+        
+        .sidebar-header {
+            height: 150px;
+            background: linear-gradient(135deg, rgba(26, 79, 197, 0.3) 0%, rgba(10, 14, 23, 1) 100%);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end;
+            padding: 20px; 
+            position: relative;
+            border-bottom: 1px solid rgba(42, 107, 255, 0.2);
+        }
+        .sidebar-header::after {
+            content: ''; 
+            position: absolute; 
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 14, 23, 0.95), transparent);
+        }
+        .sidebar-title, .sidebar-subtitle { 
+            position: relative; 
+            z-index: 2; 
+            color: white; 
+        }
+        .sidebar-title { 
+            font-family: 'Poppins', sans-serif; 
+            font-size: 1.4rem; 
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+        .sidebar-subtitle { 
+            font-size: 0.85rem; 
+            color: #8BA3FF; 
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-menu { 
+            padding: 20px 0; 
+            flex: 1;
+        }
+        .sidebar-item {
+            display: flex; 
+            align-items: center; 
+            padding: 14px 25px;
+            color: #C3D2FF; 
+            font-family: 'Inter', sans-serif; 
+            font-size: 1rem; 
+            text-decoration: none;
+            transition: all 0.3s; 
+            border-left: 3px solid transparent;
+            margin: 5px 0;
+        }
+        .sidebar-item:hover { 
+            background: rgba(42, 107, 255, 0.1); 
+            color: #fff; 
+            border-left-color: var(--accent-cyan);
+        }
+        .sidebar-item i { 
+            width: 30px; 
+            color: var(--accent-cyan); 
+            font-size: 1rem;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: rgba(42, 107, 255, 0.1);
+            margin: 15px 25px;
+            position: relative;
+        }
+
+        .sidebar-divider::before {
+            content: 'CHANNELS';
+            position: absolute;
+            top: -9px;
+            left: 25px;
+            background: rgba(10, 14, 23, 0.98);
+            padding: 0 10px;
+            font-size: 0.7rem;
+            color: #8BA3FF;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .overlay-backdrop {
+            position: absolute; 
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(3px);
+            z-index: 998; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: 0.3s;
+        }
+        .overlay-backdrop.active { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+
+        /* --- TOAST --- */
+        .toast {
+            position: absolute; 
+            bottom: 90px; 
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(10, 14, 23, 0.95);
+            border: 1px solid rgba(42, 107, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(42, 107, 255, 0.1);
+            padding: 12px 22px; 
+            border-radius: 50px;
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            color: #fff; 
+            font-size: 0.9rem; 
+            font-weight: 500;
+            opacity: 0; 
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000; 
+            width: max-content; 
+            max-width: 90%;
+            backdrop-filter: blur(10px);
+        }
+        .toast.show { 
+            opacity: 1; 
+            visibility: visible; 
+            transform: translateX(-50%) translateY(0); 
+        }
+        .toast i { 
+            color: var(--accent-cyan); 
+            font-size: 1rem;
+        }
+
+        /* --- WATERMARK --- */
+        .watermark {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: rgba(255, 255, 255, 0.1);
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div class="overlay-backdrop" onclick="toggleSidebar()"></div>
+
+        <div class="sidebar" id="mainSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">ZIPER CRUSH</div>
+                <div class="sidebar-subtitle">Premium Downloader</div>
+            </div>
+            <div class="sidebar-menu">
+             
+                <div class="sidebar-divider"></div>
+                
+                <!-- Channel Items -->
+                <a href="https://lynk.id/_ziperr_" target="_blank" class="sidebar-item">
+                    <i class="fa-brands fa-whatsapp"></i>WhatsApp Channel
+                </a>
+                <a href="https://www.tiktok.com/@ziper8611?_r=1&_t=ZS-93Yi1ZNitXz" target="_blank" class="sidebar-item">
+                    <i class="fa-brands fa-tiktok"></i>TikTok Channel
+                </a>
+                <a href="http://t.me/ziperr_mods" target="_blank" class="sidebar-item">
+                    <i class="fa-brands fa-telegram"></i>Telegram Channel
+                </a>
+                <a href="https://ziperr-storeg.vercel.app/" target="_blank" class="sidebar-item">
+                    <i class="fa-solid fa-mobile-screen-button"></i>Web APK
+                </a>
+            </div>
+            <div class="watermark">ziper</div>
+        </div>
+
+        <header>
+            
+            <div class="header-title">
+                <i class="fa-brands fa-tiktok"></i> TikTok Downloader
+            </div>
+            <button class="icon-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+        </header>
+
+        <div class="main-content">
+            
+            <div class="glass-card anim-element delay-1">
+                <div class="input-group">
+                    <input type="text" class="input-box" id="tiktok-url" placeholder="Paste TikTok URL here...">
+                    <i class="fa-solid fa-link input-icon"></i>
+                </div>
+                
+                <button class="action-btn" onclick="downloadTikTok()" id="downloadBtn">
+                    <i class="fa-solid fa-cloud-arrow-down"></i> DOWNLOAD VIDEO
+                </button>
+
+                <div class="progress-wrapper" id="progress-container">
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text" id="progress-text">Initializing...</div>
+                </div>
+            </div>
+
+            <div class="glass-card result-section" id="result-section">
+                <div class="meta-info">
+                    <div class="meta-title" id="video-title">Video Title</div>
+                    <div class="meta-author" id="video-author">@username</div>
+                </div>
+
+                <div class="video-wrapper">
+                    <video class="video-player" id="video-preview" controls loop playsinline></video>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <i class="fa-solid fa-heart"></i>
+                        <span class="stat-value" id="like-count">0</span>
+                        <span>Likes</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-comment"></i>
+                        <span class="stat-value" id="comment-count">0</span>
+                        <span>Comments</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-share"></i>
+                        <span class="stat-value" id="share-count">0</span>
+                        <span>Shares</span>
+                    </div>
+                </div>
+
+                <div class="dl-grid">
+                    <a href="#" class="dl-btn" id="dl-video">
+                        <i class="fa-solid fa-video"></i>
+                        <span>Video HD</span>
+                        <small>No Watermark • MP4</small>
+                    </a>
+                    <a href="#" class="dl-btn" id="dl-audio">
+                        <i class="fa-solid fa-music"></i>
+                        <span>Audio Only</span>
+                        <small>High Quality • MP3</small>
+                    </a>
+                </div>
+            </div>
+
+            <div class="terminal-log anim-element delay-3" id="log">
+                <div class="log-line log-success">System ready</div>
+                <div class="log-line log-info">Paste TikTok URL to begin</div>
+            </div>
+
+        </div>
+
+        <div class="toast" id="toast">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="toast-msg">Notification</span>
+        </div>
+
+        <div class="watermark">ZIPER PRO</div>
+
+    </div>
+
+    <script>
+        // Sidebar Toggle
+        function toggleSidebar() {
+            document.getElementById('mainSidebar').classList.toggle('active');
+            document.querySelector('.overlay-backdrop').classList.toggle('active');
+        }
+
+        // Utilities
+        const utils = {
+            log: (msg, type = '') => {
+                const log = document.getElementById('log');
+                const line = document.createElement('div');
+                let className = 'log-line';
+                if (type === 'error') className += ' log-error';
+                else if (type === 'info') className += ' log-info';
+                else if (type === 'success') className += ' log-success';
+                
+                line.className = className;
+                line.innerHTML = `<span>${msg}</span>`;
+                log.appendChild(line);
+                log.scrollTop = log.scrollHeight;
+                
+                // Keep only last 10 lines
+                const lines = log.querySelectorAll('.log-line');
+                if (lines.length > 10) {
+                    lines[0].remove();
+                }
+            },
+            toast: (msg, type = 'info') => {
+                const t = document.getElementById('toast');
+                const icon = t.querySelector('i');
+                const msgSpan = document.getElementById('toast-msg');
+                
+                // Change icon based on type
+                if (type === 'success') {
+                    icon.className = 'fa-solid fa-circle-check';
+                    t.style.borderColor = 'rgba(0, 255, 157, 0.3)';
+                } else if (type === 'error') {
+                    icon.className = 'fa-solid fa-circle-exclamation';
+                    t.style.borderColor = 'rgba(255, 107, 139, 0.3)';
+                } else {
+                    icon.className = 'fa-solid fa-circle-info';
+                    t.style.borderColor = 'rgba(42, 107, 255, 0.3)';
+                }
+                
+                msgSpan.innerText = msg;
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 3000);
+            },
+            loading: (state) => {
+                const btn = document.getElementById('downloadBtn');
+                const prog = document.getElementById('progress-container');
+                if(state) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PROCESSING...';
+                    prog.style.display = 'block';
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> DOWNLOAD VIDEO';
+                    prog.style.display = 'none';
+                }
+            },
+            progress: (pct, text) => {
+                document.getElementById('progress-fill').style.width = pct + '%';
+                document.getElementById('progress-text').innerText = text;
+            }
+        };
+
+        // API Logic
+        const API_ENDPOINTS = [
+            {
+                name: "Server 1",
+                url: (url) => `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`,
+                method: "GET",
+                parse: (data) => {
+                    if (data.data) {
+                        return {
+                            success: true,
+                            video: data.data.play || data.data.wmplay,
+                            music: data.data.music,
+                            title: data.data.title,
+                            author: data.data.author?.nickname || "User",
+                            stats: {
+                                like: data.data.digg_count || 0,
+                                comment: data.data.comment_count || 0,
+                                share: data.data.share_count || 0
+                            }
+                        };
+                    }
+                    throw new Error("Invalid response");
+                }
+            },
+            {
+                name: "Server 2",
+                url: (url) => `https://www.tikdown.org/api/ajaxSearch?url=${encodeURIComponent(url)}&_=${Date.now()}`,
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+                parse: (data) => {
+                    if (data.data && data.links) {
+                        return {
+                            success: true,
+                            video: data.links[0]?.a || data.links[0]?.url,
+                            music: data.music,
+                            title: data.title,
+                            author: data.author,
+                            stats: {
+                                like: data.like_count || 0,
+                                comment: data.comment_count || 0,
+                                share: data.share_count || 0
+                            }
+                        };
+                    }
+                    throw new Error("Invalid response");
+                }
+            }
+        ];
+
+        async function fetchTikTokData(url) {
+            for (const endpoint of API_ENDPOINTS) {
+                try {
+                    utils.log(`Trying ${endpoint.name}...`, 'info');
+                    utils.progress(30, `Connecting to ${endpoint.name}...`);
+                    
+                    const options = { method: endpoint.method };
+                    if (endpoint.headers) options.headers = endpoint.headers;
+                    if (endpoint.method === "POST") options.body = new URLSearchParams({ url: url });
+
+                    const res = await fetch(endpoint.url(url), options);
+                    
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    
+                    const data = await res.json();
+                    utils.log(`${endpoint.name} responded`, 'success');
+                    utils.progress(60, "Parsing data...");
+                    
+                    const result = endpoint.parse(data);
+                    if (result.success) return result;
+
+                } catch (e) {
+                    utils.log(`${endpoint.name} failed: ${e.message}`, 'error');
+                }
+            }
+            throw new Error("All servers are busy. Please try again.");
+        }
+
+        async function downloadTikTok() {
+            const url = document.getElementById('tiktok-url').value.trim();
+            if (!url) {
+                utils.toast("Please paste a TikTok link first!", 'error');
+                document.getElementById('tiktok-url').focus();
+                return;
+            }
+
+            // Validate URL
+            if (!url.includes('tiktok.com')) {
+                utils.toast("Please enter a valid TikTok URL", 'error');
+                return;
+            }
+
+            utils.loading(true);
+            document.getElementById('result-section').style.display = 'none';
+            utils.progress(10, "Validating URL...");
+
+            try {
+                const data = await fetchTikTokData(url);
+                utils.progress(80, "Processing media...");
+
+                // Update UI
+                document.getElementById('video-title').innerText = data.title || "No Title Available";
+                document.getElementById('video-author').innerText = "@" + data.author;
+                document.getElementById('like-count').innerText = formatNumber(data.stats.like);
+                document.getElementById('comment-count').innerText = formatNumber(data.stats.comment);
+                document.getElementById('share-count').innerText = formatNumber(data.stats.share);
+
+                const vid = document.getElementById('video-preview');
+                vid.src = data.video;
+                vid.load();
+
+                // Setup Download Buttons
+                setupBtn('dl-video', data.video, `tiktok_${Date.now()}.mp4`);
+                setupBtn('dl-audio', data.music, `audio_${Date.now()}.mp3`);
+                
+                const audioBtn = document.getElementById('dl-audio');
+                if(!data.music) {
+                    audioBtn.style.display = 'none';
+                    document.querySelector('.dl-grid').style.gridTemplateColumns = '1fr';
+                } else {
+                    audioBtn.style.display = 'flex';
+                    document.querySelector('.dl-grid').style.gridTemplateColumns = '1fr 1fr';
+                }
+
+                utils.progress(100, "Ready to download!");
+                
+                const resSec = document.getElementById('result-section');
+                resSec.style.display = 'block';
+                resSec.classList.add('anim-element');
+                
+                // Scroll to result on mobile
+                if(window.innerWidth < 768) {
+                    setTimeout(() => resSec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+                }
+                
+                utils.log(`Video loaded: ${data.title.substring(0, 30)}...`, 'success');
+                utils.toast("Video ready for download!", 'success');
+
+            } catch (e) {
+                utils.toast(e.message, 'error');
+                utils.log(`Error: ${e.message}`, 'error');
+            } finally {
+                setTimeout(() => utils.loading(false), 500);
+            }
+        }
+
+        function setupBtn(id, url, name) {
+            const btn = document.getElementById(id);
+            btn.onclick = (e) => {
+                e.preventDefault();
+                if (!url) {
+                    utils.toast("No download link available", 'error');
+                    return;
+                }
+                utils.toast(`Downloading ${name}...`, 'success');
+                
+                // Create temporary link for download
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                a.target = '_blank';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                utils.log(`Download started: ${name}`, 'info');
+            }
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000000) return (num/1000000000).toFixed(1) + 'B';
+            if (num >= 1000000) return (num/1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num/1000).toFixed(1) + 'K';
+            return num;
+        }
+
+        // Auto-focus input on load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('tiktok-url').focus();
+            }, 500);
+            
+            // Add input event for real-time validation
+            document.getElementById('tiktok-url').addEventListener('input', (e) => {
+                if (e.target.value.includes('tiktok.com')) {
+                    e.target.style.borderColor = 'rgba(0, 209, 255, 0.5)';
+                }
+            });
+        });
+
+        // Prevent form submission on enter
+        document.getElementById('tiktok-url').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                downloadTikTok();
+            }
+        });
+    </script>
+</body>
+</html>
